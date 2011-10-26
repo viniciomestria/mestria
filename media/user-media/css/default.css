@@ -1,0 +1,35 @@
+body
+{
+	padding-top:50px;
+}
+
+.row_link, .row_link_cp
+{
+	cursor:pointer;
+}
+
+.hidden
+{
+	display: none;
+}
+
+#form_popup
+{
+	display: none;
+	position: fixed;
+	height: 200px;
+	width: 408px;
+	background: #fff;
+	border: 2px solid #cecece;
+	z-index: 2;
+}
+
+#form_popup h3
+{
+	text-align: center;
+}
+
+#id_componente, #cp_id
+{
+	display: none;
+}

@@ -1,0 +1,13 @@
+{% extends 'producao/base.html' %}
+
+{% block title %}Selecione o produto{% endblock title %}
+
+{% block content %}
+<h1>Montagem de Produto</h1>
+
+<table>
+	{% for produto in lista_produtos %}
+	<tr><a href="{{ produto.id }}">{{ produto }}</a></tr>
+	{% endfor %}
+</table>
+{% endblock content %}

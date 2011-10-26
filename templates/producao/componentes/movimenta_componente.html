@@ -1,0 +1,87 @@
+{% extends 'producao/base.html' %}
+
+{% block title %}Movimenta&ccedil;&atilde;o de Componente{% endblock title %}
+
+{% block extra_script %}
+<script>
+function valida_mov() {
+	
+	erro = document.getElementById('erro');
+	caminho = document.getElementById('caminho');
+	qnt = document.getElementById('quantidade');
+	qnt_container = document.getElementById('qnt-container')
+
+	if(qnt.value == '') {
+		erro.innerHTML = "<-- Campo n&atilde;o pode estar vazio!";
+		qnt_container.className = 'clearfix error';
+		qnt.className = 'error';
+		return false;
+	}
+
+	if(caminho.value == '1') {
+		if(qnt.value < 1 || qnt.value > {{ comp.est_reserva }}) {
+			erro.innerHTML = "<-- Valor fora dos limites!";
+			qnt_container.className = 'clearfix error';
+			qnt.className = 'error';
+			return false;
+		}
+	} else {
+		if(qnt.value < 1 || qnt.value > {{ comp.est_producao }}) {
+			erro.innerHTML = "Fora dos limites";
+			qnt_container.className = 'clearfix error';
+			qnt.className = 'error';
+			return false;
+		}
+	}
+
+	return true;
+}
+
+function remove_erro() {
+	erro = document.getElementById('erro');
+	qnt = document.getElementById('quantidade');
+	qnt_container = document.getElementById('qnt-container');
+
+	qnt.className = "";
+	qnt_container.className = "clearfix";
+	erro.innerHTML = "";
+}
+</script>
+{% endblock extra_script %}
+
+{% block content %}
+<h1>Movimenta&ccedil;&atilde;o de Estoque - Componente #{{ comp.id }}</h1>
+
+<p><big>
+	<strong>Estoque Reserva:</strong> {{ comp.est_reserva }} &nbsp; &nbsp; &nbsp; &nbsp;  <strong>Estoque de Produ&ccedil;&atilde;o:</strong> {{ comp.est_producao }}
+</big></p>
+
+<br />
+<br />
+
+<form action="" method="post" onsubmit="return valida_mov();">
+
+	<div class="clearfix">
+		<label for="caminho">Caminho</label>
+		<div class="input">
+			<select name="caminho" id="caminho">
+				<option value="1">Reserva para Produ&ccedil;&atilde;o</option>
+				<option value="2">Produ&ccedil;&atilde;o para Reserva</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="clearfix" id="qnt-container">
+		<label for="quantidade">Quantidade</label>
+		<div class="input">
+			<input type="text" class="" name="quantidade" value="" id="quantidade" onfocus="remove_erro();" /><span class="help-inline" id="erro"></span>
+		</div>
+	</div>
+
+	<div class="actions">
+		<input type="submit" class="btn primary" value="Movimentar" />
+		<input type="button" class="btn" value="Cancelar" onclick="location.href='../'" />
+	</div>
+</form>
+
+{% endblock content %}

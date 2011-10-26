@@ -1,0 +1,82 @@
+{% extends 'producao/base.html' %}
+
+{% block extra_script %}
+<script>
+$(document).ready(function(){                     
+	$('#data').focus(function() {
+		$(this).calendario({
+			target:'#data',
+			top:0,
+			left:220
+		});
+	});
+});
+</script>
+{% endblock extra_script %}
+
+{% block title %}Montagem de Produto{% endblock title %}
+
+{% block content %}
+<h1>Montagem de Produto - {{ produto }}</h1>
+
+<br />
+
+<form method="post" action="">
+
+	<div class="clearfix">
+		<label for="quantidade">Quantidade</label>
+		<div class="input">
+			<input type="text" id="quantidade" name="quantidade" />
+		</div>
+	</div>
+
+	<div class="clearfix">
+		<label for="funcionario">Funcion&aacute;rio</label>
+		<div class="input">
+			<select name="funcionario">
+				<option value="">Selecione</option>
+				{% for funcionario in lista_funcionarios %}
+				<option value="{{ funcionario.id }}">{{ funcionario.primeiro_nome }}</option>
+				{% endfor %}
+			</select>
+		</div>
+	</div>
+
+	<div class="clearfix">
+		<label for="data">Data</label>
+		<div class="input">
+			<input type="text" id="data" name="quantidade" max_length="10" />
+		</div>
+	</div>
+
+	<div class="clearfix">
+		<label for="observacao">Observa&ccedil;&atilde;o</label>
+		<div class="input">
+			<textarea id="observacao" name="observacao" rows="10" cols="40"></textarea>
+		</div>
+	</div>
+
+	<h2>Componentes redundantes <small>Selecione o componente usado em cada Tag</small></h2>
+	<br />
+	{% for lista_comp in componentes_redundantes %}
+	<div class="clearfix">
+		{% for comp in lista_comp %}
+		{% if forloop.first %}
+		<label for="{{ comp.tag }}">Tag {{ comp.tag }}</label>
+		<div class="input">
+			<select name="{{ comp.tag }}" id="{{ comp.tag }}">		
+		{% endif %}
+				<option value="{{ comp.componente.id }}">{{ comp.componente }}</option>
+		{% endfor %}
+			</select>
+		</div>
+	</div>
+	{% endfor %}
+	
+	<div class="actions">
+		<input type="submit" name="submit" value="Montar" class="btn primary" />
+		<a class="btn" href="../">Cancelar</a> 
+	</div>
+</form>
+
+{% endblock content %}

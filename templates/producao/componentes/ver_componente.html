@@ -1,0 +1,34 @@
+{% extends 'producao/base.html' %}
+
+{% block title %}Componente #{{ comp.id }}{% endblock title %}
+
+{% block content %}
+<h1>Componente #{{ comp.id }}</h1>
+
+<table class="zebra-striped">
+	<tbody>
+		<tr><td>Mestria Part-Number</td><td>{{ comp }}</td></tr>
+		<tr><td>Grupo</td><td>{{ comp.grupo }}</td></tr>
+		<tr><td>Fabricante</td><td>{{ comp.fabricante }}</td></tr>
+		<tr><td>Fabricante Part-Number</td><td>{{ comp.fabricante_pn }}</td></tr>
+		<tr><td>Fornecedor</td><td>{{ comp.fornecedor }}</td></tr>
+		<tr><td>Fornecedor Part-Number</td><td>{{ comp.fornecedor_pn }}</td></tr>
+		<tr><td>NCM</td><td>{{ comp.ncm }}</td></tr>
+		<tr><td>Origem</td><td>{{ comp.origem }}</td></tr>
+		<tr><td>Descri&ccedil;&atilde;o</td><td>{{ comp.descricao }}</td></tr>
+		<tr><td>Lead-time</td><td>{{ comp.lead_time }}</td></tr>
+		<tr><td>Pre&ccedil;o M&eacute;dio</td><td>R$ {{ comp.preco_medio }}</td></tr>
+		<tr><td>Unidade</td><td>{{ comp.unidade }}</td></tr>
+		<tr><td>Estoque Reserva</td><td>{{ comp.est_reserva }}</td></tr>
+		<tr><td>Estoque Produ&ccedil;&atilde;o</td><td>{{ comp.est_producao }}</td></tr>
+	</tbody>
+</table>
+
+<div class="actions">
+	<input type="button" class="btn primary" value="Movimenta&ccedil;&atilde;o entre estoque" onclick="location.href='movimenta'" />
+	<input type="button" class="btn primary" value="Retirar de estoque" />
+	<input type="button" class="btn primary" value="Hist&oacute;rico" />
+	<input type="button" class="btn" value="Voltar" onclick="location.href='../'" />
+</div>
+
+{% endblock content %}

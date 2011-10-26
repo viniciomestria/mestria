@@ -1,0 +1,53 @@
+{% extends 'producao/base.html' %}
+
+{% block title %}Produtos{% endblock title %}
+
+{% block extra_script %}
+<script>
+	$(function() {
+		$("table#sortProdutosTable").tablesorter({ sortList:[[0,0]] });
+	});
+</script>
+{% endblock extra_script %}
+
+
+{% block content %}
+	
+	<h2>Produtos</h2>
+
+	{% if produtos.object_list %}
+	
+	<table class="zebra-striped" id="sortProdutosTable">
+		<thead>
+			<tr>
+				<th class="header">#</th>
+				<th class="header blue">Nome</th>
+				<th class="header green">Arquivo 1</th>
+				<th class="header blue">Arquivo 2</th>
+				<th class="header green">Arquivo 3</th>
+				<th class="header blue">Est. Res.</th>
+				<th class="header green">Est. Prod.</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for prod in produtos.object_list %}
+			<tr class="row_link" onclick="location.href='{{ prod.id }}'">
+				<td>{{ prod.id }}</td>
+				<td>{{ prod.nome }}</td>
+				<td>{% if prod.arquivo1 %}<a href="/user-media/{{ prod.arquivo1 }}" alt="Visualizar" target="_blank">Visualizar</a>{% else %}Nenhum{% endif %}</td>
+				<td>{% if prod.arquivo2 %}<a href="/user-media/{{ prod.arquivo2 }}" alt="Visualizar" target="_blank">Visualizar</a>{% else %}Nenhum{% endif %}</td>
+				<td>{% if prod.arquivo3 %}<a href="/user-media/{{ prod.arquivo3 }}" alt="Visualizar" target="_blank">Visualizar</a>{% else %}Nenhum{% endif %}</td>
+				<td>{{ prod.est_reserva }}</td>
+				<td>{{ prod.est_producao }}</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+	{% else %}
+	<p>Sem produtos cadastrados.</p>
+	{% endif %}
+
+{% endblock content %}
+
+

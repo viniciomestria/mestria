@@ -1,0 +1,146 @@
+{% extends 'producao/base.html' %}
+
+{% block title %}Componentes{% endblock title %}
+
+{% block extra_script %}
+<script>
+	$(function() {
+		$("table#sortComponentesTable").tablesorter({ sortList:[[1,0]] });
+	});
+</script>
+{% endblock extra_script %}
+
+
+{% block content %}
+
+<h3>Componentes</h3>
+
+{# == Formulario de filtro == #}
+<form action="" method="get" class="form-stacked">
+	
+	{# Primeira linha #}
+	<div class="row">
+		<div class="span3">
+			<div class="clearfix">
+				<label for="mes_pn">Mestria PN</label>
+				<div class="input"><input type="text" class="medium" name="mes_pn" id="mes_pn" value="{{ filtro.mes_pn }}" /></div>
+			</div>
+		</div>
+		<div class="span3">
+			<div class="clearfix">
+				<label for="desc">Descri&ccedil;&atilde;o</label>
+				<div class="input"><input type="text" class="medium" name="desc" id="desc" value="{{ filtro.desc }}" /></div>
+			</div>
+		</div>
+		<div class="span3">
+			<div class="clearfix">
+				<label for="orig">Origem</label>
+				<div class="input">
+					<select name="orig" id="orig" class="medium">
+						<option value="" {% if not nacional %}{% if not importado %}selected{% endif %}{% endif %}>Todas</option>
+						<option value="1" {% if nacional %}selected{% endif %}>Nacional</option>
+						<option value="2" {% if importado %}selected{% endif %}>Importado</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+	{# Fim da primeira linha #}
+	
+	{# Segunda linha #}
+	<div class="row">
+	
+		<div class="span3">
+			<div class="clearfix">
+				<label for="fab">Fabricante</label>
+				<div class="input"><input type="text" class="medium" name="fab" id="fab" value="{{ filtro.fab }}" /></div>
+			</div>
+		</div>
+		<div class="span3">
+			<div class="clearfix">
+				<label for="fab_pn">Fabricante PN</label>
+				<div class="input"><input type="text" class="medium" name="fab_pn" id="fab_pn" value="{{ filtro.fab_pn }}" /></div>
+			</div>
+		</div>
+		<div class="span3">
+			<div class="clearfix">
+				<label for="forn">Fornecedor</label>
+				<div class="input"><input type="text" class="medium" name="forn" id="forn" value="{{ filtro.forn }}" /></div>
+			</div>
+		</div>
+		<div class="span3">
+			<div class="clearfix">
+				<label for="forn_pn">Fornecedor PN</label>
+				<div class="input"><input type="text" class="medium" name="forn_pn" id="forn_pn" value="{{ filtro.forn_pn }}" /></div>
+			</div>
+		</div>
+	</div>
+	{# Fim da segunda linha #}
+	
+	<div class="actions">
+		<input class="btn primary" type="submit" name="submit" value="Filtrar" />
+		<input class="btn" type="reset" name="reset" value="Remover filtros" onclick="location.href='./'" />
+	</div>
+	
+</form>{# Fim do formulario de filtro #}
+
+{% if componentes.object_list %}
+
+	<table class="zebra-striped" id="sortComponentesTable">
+		<thead>
+			<th class="header">#</th>
+			<th class="header green">Mestria PN</th>
+			<th class="header blue">Fabricante</th>
+			<th class="header green">Fornecedor</th>
+			<th class="header blue">Descri&ccedil;&atilde;o</th>
+			<th class="header green">Unid.</th>
+			<th class="header blue">Est. Res.</th>
+			<th class="header green">Est. Prod.</th>
+			<th class="header blue">Pre&ccedil;o M&eacute;dio</th>
+		</thead>
+		<tbody>
+		{% for cp in componentes.object_list %}
+			<tr class="row_link" onclick="location.href='{{ cp.id }}'">
+				<td>{{ cp.id }}</td>
+				<td>{{ cp }}</td>
+				<td>{{ cp.fabricante }}</td>
+				<td>{{ cp.fornecedor }}</td>
+				<td>{{ cp.descricao }}</td>
+				<td>{{ cp.unidade }}</td>
+				<td>{{ cp.est_reserva }}</td>
+				<td>{{ cp.est_producao }}</td>
+				<td>R$ {{ cp.preco_medio }}</td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+
+	<div class="pagination">
+		<ul>
+			{% if componentes.has_previous %}
+			<li class="prev"><a href="?page={{ componentes.previous_page_number }}">Anterior</a></li>
+			{% else %}
+			<li class="prev disabled"><a>Anterior</a></li>
+			{% endif %}
+		
+			{% for p in componentes.paginator.page_range %}
+			{% ifequal p componentes.number %}
+			<li class="active"><a>{{ componentes.number }}</a></li>
+			{% else %}
+			<li><a href="?page={{ p }}">{{ p }}</a></li>
+			{% endifequal %}
+			{% endfor %}
+
+			{% if componentes.has_next %}
+			<li class="next"><a href="?page={{ componentes.next_page_number }}">Pr&oacute;xima</a></li>
+			{% else %}
+			<li class="next disabled"><a>Pr&oacute;xima</a></li>
+			{% endif %}
+		</ul>
+	</div>
+
+{% else %}
+	<p>Sem componentes cadastrados.</p>
+{% endif %}
+
+{% endblock content %}

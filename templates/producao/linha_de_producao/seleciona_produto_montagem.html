@@ -1,0 +1,23 @@
+{% extends 'producao/base.html' %}
+
+{% block title %}Selecione o produto{% endblock title %}
+
+{% block content %}
+<h1>Montagem de Produto</h1>
+
+<div class="row">
+	<div class="span8 offset6">
+		
+		<p>Selecione o produto a ser montado.</p>
+		
+		<table class="zebra-striped">
+			{% for produto in lista_produtos %}
+			<tr>
+				<td style="padding:8px;"><a href="{{ produto.id }}">{{ produto }}</a></td>
+			</tr>
+			{% endfor %}
+		</table>
+
+	</div>
+</div>
+{% endblock content %}

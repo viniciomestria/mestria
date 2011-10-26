@@ -1,0 +1,87 @@
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" >
+
+	<link rel="stylesheet" href="/user-media/css/bootstrap.css" />
+	<link rel="stylesheet" href="/user-media/css/default.css" />
+	<link rel="stylesheet" href="/user-media/css/calendario.css" />
+
+	<script src="/user-media/js/jquery-1.5.2.min.js"></script>
+	<script src="/user-media/js/jquery.tablesorter.min.js"></script> 
+	<script src="/user-media/js/default.js"></script>
+	<script src="/user-media/js/alerts.js"></script>
+	<script src="/user-media/js/calendario.js"></script>
+	<script src="/user-media/js/dropdown.js"></script>
+	<script src="/user-media/js/popover.js"></script>
+	{% block extra_script %}{% endblock %}
+
+	<title>{% block title %}{% endblock %} | Mestria</title>
+</head>
+
+<body>
+
+<div class="topbar-wrapper" style="z-index: 5;">
+	<div class="topbar" data-dropdown="dropdown">
+		<div class="topbar-inner">
+			<div class="container">
+				<div class="nav">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle"><b><big>Estoque</big></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="/componentes">Componentes</a></li>
+							<li class="divider"></li>
+							<li><a href="/pedidos">Pedidos</a></li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle"><b><big>Produ&ccedil;&atilde;o</big></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="/produtos">Produtos</a></li>
+							<li class="divider"></li>
+							<li><a href="/linha-de-producao">Linha de Produ&ccedil;&atilde;o</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="/admin" target="_blank">Ir para Administra&ccedil;&atilde;o</a>
+					</li>
+				</div>
+				<ul class="nav secondary-nav">
+					<li>
+						<h3><a href="/">Mestria Automa&ccedil;&atilde;o e Tecnologia</a></h3>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="container">
+	<div class="row">
+		
+		<!--div class="span2 columns">
+			{% block sidebar %}
+			<h3>Menu</h3>
+			<table class="zebra-striped">
+				<tr class="row_link" onclick="location.href='/pedidos'">
+					<td><strong>Pedidos</strong></td>
+				</tr>
+				<tr class="row_link" onclick="location.href='/componentes'">
+					<td><strong>Componentes</strong></td>
+				</tr>
+			</table>			
+			{% endblock sidebar %}
+		</div-->
+		
+		<div class="span20 columns">
+		{% block content %}
+			Todo conte&uacute;do aqui.
+		{% endblock content %}
+		</div>
+
+	</div><!-- row -->
+</div><!-- container -->
+
+</body>
+
+</html>

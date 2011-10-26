@@ -1,0 +1,77 @@
+{% extends 'producao/base.html' %}
+
+{% block title %}Pedido #{{ pedido.id }}{% endblock title %}
+
+{% block extra_script %}
+<script>
+$(document).ready(function() {
+	
+	$("#id_data_abertura").ready(function() {
+		var data = $("#id_data_abertura").attr('value');
+		data = data.split("-");
+		var ano = data[0];
+		var mes = data[1];
+		var dia = data[2];
+		dia = dia.split(" ");
+		dia = dia[0];
+		$("#id_data_abertura").attr('value', dia + "/" + mes + "/" + ano);
+	});
+	
+	$("#cancela").click(function () {
+		if(confirm("Cancelar esse pedido?")) {
+			var pedido_id_val = $("#pedido_id").val();
+			$.post("/pedidos/cancela/", {
+				pedido_id: pedido_id_val
+			}, function(data) {
+				location.reload();
+			});
+		}
+	});
+
+	$("#receber").click(function () {
+		location.href = 'receber';	
+	});
+
+	$('#id_data_abertura').focus(function() {
+		$(this).calendario({
+			target:'#id_data_abertura',
+			top:0,
+			left:220
+		});
+	});
+});
+</script>
+{% endblock extra_script %}
+
+{% block content %}
+
+<h1>Pedido #{{ pedido.id }}</h1>
+
+{% if mensagem %}
+<div class="alert-message success" data-alert='alert'>
+	<a class="close" href="#">x</a>
+	<p>{{ mensagem }}</p>
+</div>
+{% endif %}
+
+<form method="post" action="">
+	{% for field in form %}
+	<div class="clearfix">
+	{{ field.label_tag }}
+		<div class="input">
+			{{ field }}
+		</div>
+	</div>
+	{% endfor %}
+	<div class="actions">
+		<input type="hidden" id="pedido_id" value="{{ pedido.id }}" />
+		{% if not cancelado %}
+		<input type="submit" class="btn primary" value="Salvar" />
+		<input type="button" class="btn danger" id="cancela" value="Cancelar pedido" />
+		<input type="button" class="btn success" id="receber" value="Receber" />
+		{% endif %}
+		<input type="button" class="btn info" value="Componentes" onclick="javascript:parent.location.href='componentes';" />
+		<input type="button" class="btn" value="Voltar" onclick="javascript:parent.location.href='/pedidos';"/>
+	</div>
+</form>
+{% endblock content %}

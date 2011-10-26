@@ -1,0 +1,78 @@
+{% extends 'producao/base.html' %}
+
+{% block title %}Produto #{{ produto.id }}{% endblock title %}
+
+{% block content %}
+
+<div class="actions">
+	<button class="btn" onclick="location.href='../'">Voltar</button>
+</div>
+
+<h2>Produto #{{ produto.id }} - {{ produto.nome }}</h2>
+
+<table>
+	<thead>
+		<tr>
+			<th class="header">Arquivo 1</th>
+			<th class="header">Arquivo 2</th>
+			<th class="header">Arquivo 3</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>{% if produto.arquivo1 %}<a href="/user-media/{{ produto.arquivo1 }}" target="_blank">Visualizar</a>{% else %}Nenhum{% endif %}</td>
+			<td>{% if produto.arquivo2 %}<a href="/user-media/{{ produto.arquivo2 }}" target="_blank">Visualizar</a>{% else %}Nenhum{% endif %}</td>
+			<td>{% if produto.arquivo3 %}<a href="/user-media/{{ produto.arquivo3 }}" target="_blank">Visualizar</a>{% else %}Nenhum{% endif %}</td>
+		</tr>
+	</tbody>
+</table>
+
+<h3>Subprodutos</h3>
+
+{% if subprodutos %}
+<table class="zebra-striped">
+	<thead>
+		<tr>
+			<th>Nome</th>
+			<th>Quantidade</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for subprod in subprodutos %}
+		<tr>
+			<td><a href="../{{ subprod.sub_produto.id }}" target="_blank">{{ subprod.sub_produto }}</a></td>
+			<td>{{ subprod.quantidade }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% else %}
+<p>Esse produto n&atilde;o possui subprodutos cadastrados.</p>
+{% endif %}
+
+<h3>Componentes</h3>
+
+{% if componentes %}
+<table class="zebra-striped">
+	<thead>
+		<tr>
+			<th>Mestria Part-Number</th>
+			<th>Tag</th>
+			<th>Quantidade</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for comp in componentes %}
+		<tr>
+			<td><a href="/componentes/{{ comp.componente.id }}" target="_blank">{{ comp.componente }}</a></td>
+			<td>{{ comp.tag }}</td>
+			<td>{{ comp.quantidade }}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% else %}
+<p>Esse produto n&atilde;o possui componentes cadastrados.</p>
+{% endif %}
+
+{% endblock content %}

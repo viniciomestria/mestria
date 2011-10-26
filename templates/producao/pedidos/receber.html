@@ -1,0 +1,100 @@
+{% extends 'producao/base.html' %}
+
+{% block title %}Receber Pedido{% endblock %}
+
+{% block extra_script %}
+<script>    
+$(document).ready(function(){    	              
+	$('#data_fechamento').focus(function() {
+		$(this).calendario({
+			target:'#data_fechamento',
+			top:0,
+			left:220
+		});
+	});
+
+	$('#cancelar').click(function() {
+		location.href='../';	
+	});
+
+	$('#submit').click(function() {
+		valor_trans = $("#valor_transportadora").val();
+		valor_outros = $("#valor_outros_gastos").val();
+
+		valor_trans = valor_trans.replace(',', '.');
+		valor_outros = valor_outros.replace(',', '.');
+
+		$("#valor_transportadora").attr('value', valor_trans);
+		$("#valor_outros_gastos").attr('value', valor_outros);
+	})
+});  
+</script>
+{% endblock extra_script %}
+
+{% block content %}
+<h1>Receber Pedido #{{ pedido.id }}</h1>
+
+<form name="form1" action="" method="post">
+
+	<div class="clearfix">
+		<label for="data_fechamento">Data de recebimento</label>
+		<div class="input">
+			<input id="data_fechamento" name="data_fechamento" size="30" type="text" value="" />
+		</div>
+	</div>
+
+	<div class="clearfix">
+		<label for="observacao">Observa&ccedil;&atilde;o</label>
+		<div class="input">	
+			<textarea name="observacao" rows="6" cols="40">{{ pedido.observacao }}</textarea>
+		</div>
+	</div>
+
+	<div class="clearfix">
+		<label for="transportadora">Transportadora</label>
+		<div class="input">
+			<select name="transportadora">
+				<option value="">Selecione</option>
+				{% for t in transportadoras %}
+				<option value="{{ t.id }}">{{ t }}</option>
+				{% endfor %}
+			</select>
+		</div>
+	</div>
+
+	<div class="clearfix">
+		<label for="valor_transportadora">Valor do transporte</label>
+		<div class="input">
+			<div class="input-prepend">
+				<span class="add-on">R$</span>
+				<input class="small" name="valor_transportadora" id="valor_transportadora" type="text" />
+			</div>
+		</div>
+	</div>
+
+	<div class="clearfix">
+		<label for="valor_outros_gastos">Outros gastos</label>
+		<div class="input">
+			<div class="input-prepend">
+				<span class="add-on">R$</span>
+				<input class="small" name="valor_outros_gastos" id="valor_outros_gastos" type="text" />
+			</div>
+		</div>
+	</div>
+
+	<div class="clearfix">
+		<label for="descricao_outros_gastos">Descri&ccedil;&atilde;o</label>
+		<div class="input">
+			<input class="span8" name="descricao_outros_gastos" id="descricao_outros_gastos" type="text" placeholder="Descri&ccedil;&atilde;o de outros gastos." />
+		</div>
+	</div>
+	
+	<input type="hidden" name="pedido_id" value="{{ pedido.id }}" />
+
+	<div class="actions">
+		<input type="submit" id="submit" class="btn primary" value="Receber" />
+		<input type="button" id="cancelar" class="btn" value="Cancelar" />
+	</div>
+</form>
+
+{% endblock content %}

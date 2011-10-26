@@ -1,0 +1,39 @@
+{% extends 'producao/base.html' %}
+
+{% block title %}Abertura de Pedido{% endblock title %}
+
+{% block extra_script %}
+<script>
+$(document).ready(function(){                     
+	$('#id_data_abertura').focus(function() {
+		$(this).calendario({
+			target:'#id_data_abertura',
+			top:0,
+			left:220
+		});
+	});
+});
+</script>
+{% endblock extra_script %}
+
+{% block content %}
+
+<h1>Abertura de novo pedido</h1>
+
+<form method="post" action="">
+		{% for field in form %}
+			<div class="clearfix">
+				{{ field.label_tag }}
+				<div class="input">
+					{{ field }}	
+				</div>
+			</div>
+		{% endfor %}
+	<div class="actions">
+		<input type="submit" class="btn primary" value="Abrir Pedido" />
+		<input type="button" class="btn" value="Cancelar" onclick="javascript:parent.location.href='/pedidos';"/>
+	</div>
+</form>
+
+{% endblock content %}
+
