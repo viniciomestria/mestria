@@ -1,11 +1,11 @@
-from models import *
+from models import Pedido
 from django.forms import ModelForm, DateField
-from django.forms.widgets import DateTimeInput
+#from django.forms.widgets import DateTimeInput
 
 DATE_FORMAT = '%d/%m/%Y'
 
-class FormattedDateInput(DateTimeInput):
-	format = DATE_FORMAT
+#class FormattedDateInput(DateTimeInput):
+#	format = DATE_FORMAT
 
 class PedidoForm(ModelForm):
 

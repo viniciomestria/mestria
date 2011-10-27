@@ -227,7 +227,7 @@ class Componente(models.Model):
 				aux = int(ultimo_pn.part_number) + 1
 				aux = str(aux)
 				zeros = 4 - len(aux)
-				for i in range(zeros):
+				for i in range(zeros): #@UnusedVariable
 					aux = "0" + aux
 				self.mestria_pn = str(self.grupo.prefixo) + aux
 				ultimo_pn.part_number = aux
@@ -254,6 +254,10 @@ class Produto(models.Model):
 	arquivo3 = models.FileField(upload_to="produtos/", blank=True, null=True, verbose_name="arquivo 3")
 	est_reserva = models.PositiveIntegerField(verbose_name="Estoque Reserva", default=0)
 	est_producao = models.PositiveIntegerField(verbose_name="Estoque Produção", default=0)
+	qnt_montado = models.PositiveIntegerField(verbose_name="Quantidade Montado", default=0)
+	qnt_testando = models.PositiveIntegerField(verbose_name="Quantidade em Teste", default=0)
+	qnt_testado = models.PositiveIntegerField(verbose_name="Quantidade Testado", default=0)
+	qnt_na_caixa = models.PositiveIntegerField(verbose_name="Quantidade na Caixa", default=0)
 
 	def __unicode__(self):
 		return self.nome

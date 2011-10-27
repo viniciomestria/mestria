@@ -4,11 +4,16 @@ from django.shortcuts import render_to_response, redirect, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 
-import unicodedata
 from aux import str_to_money, converte_data
 
-from models import *
-from forms import *
+from models import Fornecedor
+from models import Transportadora
+from models import Funcionario
+from models import Pedido, ComponenteEmPedido
+from models import Componente
+from models import Produto, ProdutoEmProduto, ComponenteEmProduto
+
+from forms import PedidoRestritoForm
 
 #============================================================================#
 
@@ -398,38 +403,56 @@ def seleciona_produto_montagem(request):
 
 #============================================================================#
 
+@csrf_exempt
 def montar_produto(request, id_produto):
 	prod = get_object_or_404(Produto, pk=id_produto)
+	componentes = list(ComponenteEmProduto.objects.filter(produto=prod))
+	lista_funcionarios = Funcionario.objects.all().order_by('primeiro_nome')
 	
+	#== Obtendo apenas tags que se repetem
+	lista_tags_unicas = []
+	lista_todas_tags = []
+	tag_atual = ""
+	for comp in componentes:
+		lista_todas_tags.append(comp.tag)
+		if comp.tag != tag_atual:
+			lista_tags_unicas.append(comp.tag)
+			tag_atual = comp.tag
+	for tag in lista_tags_unicas:
+		if lista_todas_tags.count(tag) == 1:
+			lista_tags_unicas.remove(tag)
+	tags_repetidas = lista_tags_unicas
+	
+	componentes_redundantes = []
+	for t in tags_repetidas:
+		lista_componentes = ComponenteEmProduto.objects.filter(produto=prod, tag=t)
+		componentes_redundantes.append(lista_componentes)
+			
 	if request.method == 'POST':
-		pass
-	else:
+		quantidade = request.POST['quantidade']
+		funcionario = Funcionario.objects.get(pk=request.POST['funcionario'])
+		data = converte_data(request.POST['data'])
+		observacao = request.POST['observacao']
 		
-		componentes = list(ComponenteEmProduto.objects.filter(produto=prod))
-		
-		#== Obtendo apenas tags que se repetem
-		lista_tags_unicas = []
-		lista_todas_tags = []
-		tag_atual = ""
+		# Verifica se componentes tem estoque suficiente
+		componentes_sem_estoque = []
+		erro = False
 		for comp in componentes:
-			lista_todas_tags.append(comp.tag)
-			if comp.tag != tag_atual:
-				lista_tags_unicas.append(comp.tag)
-				tag_atual = comp.tag
-		for tag in lista_tags_unicas:
-			if lista_todas_tags.count(tag) == 1:
-				lista_tags_unicas.remove(tag)
-		tags_repetidas = lista_tags_unicas
+			qnt_exigida = comp.quantidade * quantidade
+			if comp.componente.est_producao < qnt_exigida:
+				erro = True
+				componentes_sem_estoque.append(comp.componente)
+		if erro: # Algum componente sem estoque
+			return render_to_response('producao/linha_de_producao/montar_produto.html', {
+				'produto': prod,
+				'lista_funcionarios': lista_funcionarios,
+				'componentes_redundantes': componentes_redundantes,
+				'componentes_sem_estoque': componentes_sem_estoque,
+			})
 		
-		componentes_redundantes = []
-		for t in tags_repetidas:
-			lista_componentes = ComponenteEmProduto.objects.filter(produto=prod, tag=t)
-			componentes_redundantes.append(lista_componentes)
-		
-		lista_funcionarios = Funcionario.objects.all().order_by('primeiro_nome')
+	else: # Request method GET
 		return render_to_response('producao/linha_de_producao/montar_produto.html', {
 			'produto': prod,
 			'lista_funcionarios': lista_funcionarios,
-			'tags_repetidas': tags_repetidas,
 			'componentes_redundantes': componentes_redundantes,
 		})
